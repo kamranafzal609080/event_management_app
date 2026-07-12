@@ -1,3 +1,4 @@
+import 'package:event_management_app/user/navigation/user_main_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:event_management_app/core/theme/light_theme.dart';
@@ -10,7 +11,7 @@ void main() async {
   runApp(
     ChangeNotifierProvider(
       create: (_) => ThemeProvider(),
-      child: const EventManagementApp(),
+      child:  EventManagementApp(),
     ),
   );
 }
@@ -28,7 +29,7 @@ class EventManagementApp extends StatelessWidget {
       theme: lightTheme,
       darkTheme: darkTheme,
       themeMode: themeProvider.isDarkMode ? ThemeMode.dark : ThemeMode.light,
-      home: const SplashScreen(),
+      home: SplashScreen(),
     );
   }
 }
