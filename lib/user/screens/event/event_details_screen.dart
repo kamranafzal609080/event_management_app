@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:event_management_app/core/constants/app_colors.dart';
 import 'package:event_management_app/core/widgets/custom_button.dart';
 
 class EventDetailsScreen extends StatelessWidget {
@@ -7,8 +6,11 @@ class EventDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -55,9 +57,9 @@ class EventDetailsScreen extends StatelessWidget {
             // Event Content
             Container(
               padding: const EdgeInsets.all(24),
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
+              decoration: BoxDecoration(
+                color: theme.scaffoldBackgroundColor,
+                borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(30),
                   topRight: Radius.circular(30),
                 ),
@@ -65,26 +67,26 @@ class EventDetailsScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     "Made in Melanin! Black History Month Social.....",
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
-                      color: AppColors.black,
+                      color: theme.textTheme.headlineMedium?.color,
                     ),
                   ),
                   const SizedBox(height: 16),
 
                   // Date and Time
                   Row(
-                    children: const [
-                      Icon(Icons.calendar_month, color: AppColors.black, size: 20),
-                      SizedBox(width: 12),
+                    children: [
+                      Icon(Icons.calendar_month, color: isDark ? Colors.white70 : Colors.black, size: 20),
+                      const SizedBox(width: 12),
                       Text(
                         "28 October 2025 6:00pm GMT",
                         style: TextStyle(
                           fontSize: 16,
-                          color: AppColors.black,
+                          color: theme.textTheme.bodyLarge?.color,
                         ),
                       ),
                     ],
@@ -93,15 +95,15 @@ class EventDetailsScreen extends StatelessWidget {
 
                   // Location
                   Row(
-                    children: const [
-                      Icon(Icons.location_on, color: AppColors.black, size: 20),
-                      SizedBox(width: 12),
+                    children: [
+                      Icon(Icons.location_on, color: isDark ? Colors.white70 : Colors.black, size: 20),
+                      const SizedBox(width: 12),
                       Expanded(
                         child: Text(
                           "1901 Thornridge Cir. Shiloh, Hawaii 81063",
                           style: TextStyle(
                             fontSize: 16,
-                            color: AppColors.black,
+                            color: theme.textTheme.bodyLarge?.color,
                           ),
                         ),
                       ),
@@ -109,12 +111,12 @@ class EventDetailsScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 24),
 
-                  const Text(
+                  Text(
                     "Event Detail",
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: AppColors.black,
+                      color: theme.textTheme.titleLarge?.color,
                     ),
                   ),
                   const SizedBox(height: 12),
@@ -123,15 +125,15 @@ class EventDetailsScreen extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFF9F9F9),
+                      color: isDark ? theme.cardColor : const Color(0xFFF9F9F9),
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: Colors.black.withOpacity(0.05)),
+                      border: Border.all(color: isDark ? Colors.white10 : Colors.black.withOpacity(0.05)),
                     ),
-                    child: const Text(
+                    child: Text(
                       "Lorem ipsum dolor sit amet consectetur. Sed volutpat euismod enim accumsan quam posuere. Tortor pretium lorem dui metus amet in sed. Sodales volutpat maecenas et quisque nibh ultrices in nulla. Enim fames quam turpis pellentesque vivamus massa.Lorem ipsum dolor sit amet consectetur. Sed volutpat euismod enim accumsan quam posuere. Tortor pretium lorem dui metus amet in sed. Sodales volutpat maecenas et quisque nibh ultrices in nulla. Enim fames quam turpis pellentesque vivamus massa.Lorem ipsum dolor sit amet consectetur. Sed volutpat euismod enim accumsan",
                       style: TextStyle(
                         fontSize: 14,
-                        color: AppColors.grey,
+                        color: isDark ? Colors.white70 : Colors.grey,
                         height: 1.5,
                       ),
                     ),

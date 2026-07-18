@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:event_management_app/core/widgets/custom_event_card.dart';
 
 class CalendarView extends StatelessWidget {
@@ -7,71 +6,68 @@ class CalendarView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
           /// Month Header
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-
               Container(
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: isDark ? theme.cardColor : Colors.white,
                   borderRadius: BorderRadius.circular(20),
+                  border: isDark ? Border.all(color: Colors.white12) : null,
                 ),
-                child: const Icon(Icons.chevron_left),
+                child: Icon(Icons.chevron_left, color: isDark ? Colors.white : Colors.black),
               ),
-
-              const Column(
+              Column(
                 children: [
                   Text(
                     "September",
                     style: TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
+                      color: theme.textTheme.headlineMedium?.color,
                     ),
                   ),
-                  Text(
+                  const Text(
                     "2025",
                     style: TextStyle(color: Colors.grey),
                   ),
                 ],
               ),
-
               Container(
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: isDark ? theme.cardColor : Colors.white,
                   borderRadius: BorderRadius.circular(20),
+                  border: isDark ? Border.all(color: Colors.white12) : null,
                 ),
-                child: const Icon(Icons.chevron_right),
+                child: Icon(Icons.chevron_right, color: isDark ? Colors.white : Colors.black),
               ),
             ],
           ),
-
           const SizedBox(height: 30),
 
           /// Days
-          const Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("Mon"),
-              Text("Tue"),
-              Text("Wed"),
-              Text("Thu"),
-              Text("Fri"),
-              Text("Sat"),
-              Text("Sun"),
-            ],
+              "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"
+            ].map((day) => Text(
+              day,
+              style: TextStyle(color: isDark ? Colors.white70 : Colors.black87),
+            )).toList(),
           ),
-
           const SizedBox(height: 20),
 
           /// Calendar Grid
@@ -79,51 +75,43 @@ class CalendarView extends StatelessWidget {
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: 35,
-            gridDelegate:
-            const SliverGridDelegateWithFixedCrossAxisCount(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 7,
               mainAxisSpacing: 10,
               crossAxisSpacing: 10,
             ),
             itemBuilder: (context, index) {
+              final isSelected = index == 10;
               return Container(
                 decoration: BoxDecoration(
-                  color: index == 10
-                      ? Colors.red
-                      : Colors.transparent,
+                  color: isSelected ? Colors.red : Colors.transparent,
                   shape: BoxShape.circle,
                 ),
                 child: Center(
                   child: Text(
                     "${index + 1}",
                     style: TextStyle(
-                      color: index == 10
-                          ? Colors.white
-                          : Colors.black,
+                      color: isSelected ? Colors.white : (isDark ? Colors.white : Colors.black),
                     ),
                   ),
                 ),
               );
             },
           ),
-
           const SizedBox(height: 30),
-
-          const Text(
+          Text(
             "Today's Events",
             style: TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.bold,
+              color: theme.textTheme.titleLarge?.color,
             ),
           ),
-
           const SizedBox(height: 20),
 
           /// Temporary Event Card
           const CustomEventCard(),
-
           const CustomEventCard(),
-
         ],
       ),
     );

@@ -7,53 +7,56 @@ class FeaturesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: Stack(
         children: [
           Positioned.fill(
-            child: Image.asset(
-              AppImages.backgroundPattern,
-              fit: BoxFit.cover,
+            child: Opacity(
+              opacity: isDark ? 0.05 : 1.0,
+              child: Image.asset(
+                AppImages.backgroundPattern,
+                fit: BoxFit.cover,
+              ),
             ),
           ),
-
           SafeArea(
             child: Column(
               children: [
                 const SizedBox(height: 20),
-
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
+                      Text(
                         "Features",
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black,
+                          color: theme.textTheme.headlineMedium?.color,
                         ),
                       ),
-
                       InkWell(
                         onTap: () {
-                          // TODO: Filter Bottom Sheet
+                          // TODO: Filter Dialog
                         },
                         child: Container(
                           width: 46,
                           height: 46,
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: isDark ? theme.cardColor : Colors.white,
                             shape: BoxShape.circle,
                             border: Border.all(
-                              color: Colors.grey.shade300,
+                              color: isDark ? Colors.white24 : Colors.grey.shade300,
                             ),
                           ),
-                          child: const Icon(
+                          child: Icon(
                             Icons.tune,
-                            color: Colors.black,
+                            color: isDark ? Colors.white : Colors.black,
                             size: 22,
                           ),
                         ),
@@ -61,26 +64,17 @@ class FeaturesScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-
                 const SizedBox(height: 20),
-
                 Expanded(
                   child: ListView(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     children: const [
-
                       FeatureEventCard(),
-
                       SizedBox(height: 20),
-
                       FeatureEventCard(),
-
                       SizedBox(height: 20),
-
                       FeatureEventCard(),
-
                       SizedBox(height: 20),
-
                     ],
                   ),
                 ),

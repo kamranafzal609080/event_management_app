@@ -1,24 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:event_management_app/core/constants/app_colors.dart';
 
 class EditProfileScreen extends StatelessWidget {
   const EditProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: theme.appBarTheme.backgroundColor,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          icon: Icon(Icons.arrow_back, color: isDark ? Colors.white : Colors.black),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
+        title: Text(
           "Edit Detail",
           style: TextStyle(
-            color: Colors.black,
+            color: isDark ? Colors.white : Colors.black,
             fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
@@ -30,7 +32,6 @@ class EditProfileScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 30),
-            // Profile Image with Camera Icon
             Center(
               child: Stack(
                 children: [
@@ -39,7 +40,7 @@ class EditProfileScreen extends StatelessWidget {
                     height: 130,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      border: Border.all(color: Colors.grey.shade100, width: 4),
+                      border: Border.all(color: isDark ? Colors.white12 : Colors.grey.shade100, width: 4),
                       image: const DecorationImage(
                         image: AssetImage("assets/images/person.png"),
                         fit: BoxFit.cover,
@@ -69,41 +70,38 @@ class EditProfileScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 50),
-            
-            // Username Field
-            const Text(
+            Text(
               "Username",
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
-                color: Colors.black,
+                color: isDark ? Colors.white : Colors.black,
               ),
             ),
             const SizedBox(height: 10),
             TextField(
+              style: TextStyle(color: isDark ? Colors.white : Colors.black),
               decoration: InputDecoration(
                 hintText: "Mack_tor",
-                hintStyle: TextStyle(color: Colors.grey.shade400),
+                hintStyle: TextStyle(color: isDark ? Colors.white38 : Colors.grey.shade400),
                 filled: true,
-                fillColor: Colors.white,
+                fillColor: isDark ? theme.cardColor : Colors.white,
                 contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(color: Colors.grey.shade300),
+                  borderSide: isDark ? const BorderSide(color: Colors.white24) : BorderSide(color: Colors.grey.shade300),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(color: Colors.grey.shade300),
+                  borderSide: isDark ? const BorderSide(color: Colors.white24) : BorderSide(color: Colors.grey.shade300),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: const BorderSide(color: Colors.black),
+                  borderSide: BorderSide(color: isDark ? Colors.red : Colors.black),
                 ),
               ),
             ),
             const Spacer(),
-            
-            // Save Changes Button
             Padding(
               padding: const EdgeInsets.only(bottom: 30),
               child: SizedBox(
@@ -136,8 +134,10 @@ class EditProfileScreen extends StatelessWidget {
   }
 
   void _showImageSourceBottomSheet(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     showModalBottomSheet(
       context: context,
+      backgroundColor: isDark ? const Color(0xFF1E1E1E) : Colors.white,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -148,13 +148,13 @@ class EditProfileScreen extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               ListTile(
-                leading: const Icon(Icons.camera_alt),
-                title: const Text("Camera"),
+                leading: Icon(Icons.camera_alt, color: isDark ? Colors.white : Colors.black),
+                title: Text("Camera", style: TextStyle(color: isDark ? Colors.white : Colors.black)),
                 onTap: () => Navigator.pop(context),
               ),
               ListTile(
-                leading: const Icon(Icons.photo_library),
-                title: const Text("Gallery"),
+                leading: Icon(Icons.photo_library, color: isDark ? Colors.white : Colors.black),
+                title: Text("Gallery", style: TextStyle(color: isDark ? Colors.white : Colors.black)),
                 onTap: () => Navigator.pop(context),
               ),
             ],

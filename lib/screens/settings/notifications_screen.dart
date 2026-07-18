@@ -8,7 +8,6 @@ class NotificationsScreen extends StatefulWidget {
 }
 
 class _NotificationsScreenState extends State<NotificationsScreen> {
-  // Dummy data for notifications
   final List<Map<String, dynamic>> notifications = List.generate(
     10,
     (index) => {
@@ -22,19 +21,22 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: theme.appBarTheme.backgroundColor,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          icon: Icon(Icons.arrow_back, color: isDark ? Colors.white : Colors.black),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
+        title: Text(
           "Notification",
           style: TextStyle(
-            color: Colors.black,
+            color: isDark ? Colors.white : Colors.black,
             fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
@@ -55,8 +57,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
               margin: const EdgeInsets.only(bottom: 15),
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: const Color(0xFFF9F9F9),
+                color: isDark ? theme.cardColor : const Color(0xFFF9F9F9),
                 borderRadius: BorderRadius.circular(12),
+                border: isDark ? Border.all(color: Colors.white10) : null,
               ),
               child: Row(
                 children: [
@@ -73,9 +76,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                   Expanded(
                     child: Text(
                       item["title"],
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 14,
-                        color: Colors.black87,
+                        color: isDark ? Colors.white70 : Colors.black87,
                         height: 1.4,
                       ),
                     ),

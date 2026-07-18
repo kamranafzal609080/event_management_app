@@ -13,6 +13,9 @@ class _FeatureEventCardState extends State<FeatureEventCard> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return InkWell(
       onTap: () {
         Navigator.push(
@@ -26,15 +29,18 @@ class _FeatureEventCardState extends State<FeatureEventCard> {
       child: Container(
         margin: const EdgeInsets.only(bottom: 20),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: isDark ? theme.cardColor : Colors.white,
           borderRadius: BorderRadius.circular(18),
-          boxShadow: const [
-            BoxShadow(
-              color: Colors.black12,
-              blurRadius: 10,
-              offset: Offset(0, 4),
-            ),
-          ],
+          boxShadow: isDark
+              ? null
+              : const [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 10,
+                    offset: Offset(0, 4),
+                  ),
+                ],
+          border: isDark ? Border.all(color: Colors.white12) : null,
         ),
         child: Column(
           children: [
@@ -64,8 +70,8 @@ class _FeatureEventCardState extends State<FeatureEventCard> {
                     child: Container(
                       width: 40,
                       height: 40,
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
+                      decoration: BoxDecoration(
+                        color: isDark ? Colors.black45 : Colors.white,
                         shape: BoxShape.circle,
                       ),
                       child: Icon(
@@ -83,27 +89,28 @@ class _FeatureEventCardState extends State<FeatureEventCard> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     "Tech Meetup",
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
+                      color: theme.textTheme.headlineMedium?.color,
                     ),
                   ),
                   const SizedBox(height: 10),
                   Row(
-                    children: const [
-                      Icon(
+                    children: [
+                      const Icon(
                         Icons.calendar_today,
                         color: Colors.red,
                         size: 18,
                       ),
-                      SizedBox(width: 8),
+                      const SizedBox(width: 8),
                       Expanded(
                         child: Text(
                           "Wed, 5 Nov 2025 • 2:00 PM",
                           style: TextStyle(
-                            color: Colors.grey,
+                            color: isDark ? Colors.white70 : Colors.grey,
                             fontSize: 14,
                           ),
                         ),
@@ -112,18 +119,18 @@ class _FeatureEventCardState extends State<FeatureEventCard> {
                   ),
                   const SizedBox(height: 10),
                   Row(
-                    children: const [
-                      Icon(
+                    children: [
+                      const Icon(
                         Icons.location_on,
                         color: Colors.red,
                         size: 18,
                       ),
-                      SizedBox(width: 8),
+                      const SizedBox(width: 8),
                       Expanded(
                         child: Text(
                           "2464 Royal Ln. Mesa, New Jersey 45463",
                           style: TextStyle(
-                            color: Colors.grey,
+                            color: isDark ? Colors.white70 : Colors.grey,
                             fontSize: 14,
                           ),
                         ),

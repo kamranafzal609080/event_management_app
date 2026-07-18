@@ -7,16 +7,19 @@ class FavouriteScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: theme.appBarTheme.backgroundColor,
         elevation: 0,
         centerTitle: false,
-        title: const Text(
+        title: Text(
           "Favourite",
           style: TextStyle(
-            color: Colors.black,
+            color: theme.textTheme.headlineMedium?.color,
             fontSize: 24,
             fontWeight: FontWeight.bold,
           ),
@@ -24,18 +27,15 @@ class FavouriteScreen extends StatelessWidget {
       ),
       body: Stack(
         children: [
-          // Background Pattern
           Positioned.fill(
             child: Opacity(
-              opacity: 0.1,
+              opacity: isDark ? 0.05 : 0.1,
               child: Image.asset(
                 AppImages.backgroundPattern,
                 fit: BoxFit.cover,
               ),
             ),
           ),
-
-          // Content
           ListView.builder(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             itemCount: 2,
@@ -54,24 +54,28 @@ class FavouriteEventCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Container(
       margin: const EdgeInsets.only(bottom: 25),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDark ? theme.cardColor : Colors.white,
         borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 15,
-            offset: const Offset(0, 5),
-          ),
-        ],
-        border: Border.all(color: Colors.grey.shade200),
+        boxShadow: isDark
+            ? null
+            : [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 15,
+                  offset: const Offset(0, 5),
+                ),
+              ],
+        border: isDark ? Border.all(color: Colors.white10) : Border.all(color: Colors.grey.shade200),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Event Image
           Stack(
             children: [
               ClipRRect(
@@ -90,9 +94,7 @@ class FavouriteEventCard extends StatelessWidget {
                 top: 15,
                 right: 15,
                 child: GestureDetector(
-                  onTap: () {
-                    // TODO: Toggle Favourite
-                  },
+                  onTap: () {},
                   child: const Icon(
                     Icons.favorite,
                     color: Colors.red,
@@ -102,58 +104,49 @@ class FavouriteEventCard extends StatelessWidget {
               ),
             ],
           ),
-
           Padding(
             padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   "Made in Melanin! Black History Month Social.....",
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black,
+                    color: theme.textTheme.titleLarge?.color,
                   ),
                 ),
                 const SizedBox(height: 12),
-
-                // Date & Time
                 Row(
-                  children: const [
-                    Icon(Icons.calendar_month, color: Colors.black, size: 18),
-                    SizedBox(width: 10),
+                  children: [
+                    Icon(Icons.calendar_month, color: isDark ? Colors.white70 : Colors.black, size: 18),
+                    const SizedBox(width: 10),
                     Text(
                       "28 October 2025 6:00pm GMT",
-                      style: TextStyle(fontSize: 13, color: Colors.black),
+                      style: TextStyle(fontSize: 13, color: isDark ? Colors.white70 : Colors.black),
                     ),
                   ],
                 ),
                 const SizedBox(height: 10),
-
-                // Location
                 Row(
-                  children: const [
-                    Icon(Icons.location_on, color: Colors.black, size: 18),
-                    SizedBox(width: 10),
+                  children: [
+                    Icon(Icons.location_on, color: isDark ? Colors.white70 : Colors.black, size: 18),
+                    const SizedBox(width: 10),
                     Expanded(
                       child: Text(
                         "1901 Thornridge Cir. Shiloh, Hawaii 81063",
-                        style: TextStyle(fontSize: 13, color: Colors.black),
+                        style: TextStyle(fontSize: 13, color: isDark ? Colors.white70 : Colors.black),
                       ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 20),
-
-                // Button
                 SizedBox(
                   width: double.infinity,
                   height: 52,
                   child: ElevatedButton(
-                    onPressed: () {
-                      // TODO: Add to calendar logic
-                    },
+                    onPressed: () {},
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xffD32F2F),
                       shape: RoundedRectangleBorder(

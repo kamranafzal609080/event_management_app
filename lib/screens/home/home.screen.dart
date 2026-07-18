@@ -1,29 +1,32 @@
-import 'package:event_management_app/screens/create_event/create_event_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:event_management_app/core/constants/app_images.dart';
-import 'package:event_management_app/core/widgets/filter_bottom_sheet.dart';
+import 'package:event_management_app/core/widgets/filter_dialog.dart';
 import 'package:event_management_app/screens/home/calendar_view.dart';
-import 'package:event_management_app/screens/home/list_view.dart';
+
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        backgroundColor: Colors.white,
-
+        backgroundColor: theme.scaffoldBackgroundColor,
         body: Stack(
           children: [
             Positioned.fill(
-              child: Image.asset(
-                AppImages.backgroundPattern,
-                fit: BoxFit.cover,
+              child: Opacity(
+                opacity: isDark ? 0.05 : 1.0,
+                child: Image.asset(
+                  AppImages.backgroundPattern,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
-
             SafeArea(
               child: Column(
                 children: [
@@ -35,37 +38,34 @@ class HomeScreen extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text(
+                        Text(
                           "Events",
                           style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
-                            color: Colors.black,
+                            color: theme.textTheme.headlineMedium?.color,
                           ),
                         ),
-
                         InkWell(
                           onTap: () {
-                            showModalBottomSheet(
+                            showDialog(
                               context: context,
-                              isScrollControlled: true,
-                              backgroundColor: Colors.transparent,
-                              builder: (context) =>  FilterBottomSheet(),
+                              builder: (context) => const FilterDialog(),
                             );
                           },
                           child: Container(
                             width: 46,
                             height: 46,
                             decoration: BoxDecoration(
-                              color: Colors.white,
+                              color: isDark ? theme.cardColor : Colors.white,
                               shape: BoxShape.circle,
                               border: Border.all(
-                                color: Colors.grey.shade300,
+                                color: isDark ? Colors.white24 : Colors.grey.shade300,
                               ),
                             ),
-                            child:  Icon(
+                            child: Icon(
                               Icons.tune,
-                              color: Colors.black,
+                              color: isDark ? Colors.white : Colors.black,
                               size: 22,
                             ),
                           ),
@@ -83,7 +83,7 @@ class HomeScreen extends StatelessWidget {
                       height: 52,
                       padding: const EdgeInsets.all(4),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFF5F5F5),
+                        color: isDark ? Colors.white10 : const Color(0xFFF5F5F5),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: TabBar(
@@ -93,11 +93,10 @@ class HomeScreen extends StatelessWidget {
                         ),
                         indicatorSize: TabBarIndicatorSize.tab,
                         labelColor: Colors.white,
-                        unselectedLabelColor: Colors.black54,
+                        unselectedLabelColor: isDark ? Colors.white70 : Colors.black54,
                         dividerColor: Colors.transparent,
                         splashFactory: NoSplash.splashFactory,
-                        overlayColor:
-                        const WidgetStatePropertyAll(Colors.transparent),
+                        overlayColor: const WidgetStatePropertyAll(Colors.transparent),
                         labelStyle: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
@@ -120,7 +119,7 @@ class HomeScreen extends StatelessWidget {
                     child: TabBarView(
                       children: [
                         CalendarView(),
-                        ListViewScreen(),
+
                       ],
                     ),
                   ),

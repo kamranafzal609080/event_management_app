@@ -4,8 +4,8 @@ import 'package:event_management_app/core/theme/theme_provider.dart';
 import 'package:event_management_app/screens/settings/placeholder_screens.dart';
 import 'package:event_management_app/screens/settings/edit_profile_screen.dart';
 import 'package:event_management_app/screens/settings/notifications_screen.dart';
-
-import '../auth/login_screen.dart';
+import 'package:event_management_app/screens/auth/login_screen.dart';
+import 'package:event_management_app/core/constants/app_colors.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -13,19 +13,19 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
+        backgroundColor: theme.appBarTheme.backgroundColor,
         elevation: 0,
         centerTitle: false,
         title: Text(
           "Setting",
           style: TextStyle(
-            color: Theme.of(context).brightness == Brightness.light 
-                ? const Color(0xFF555555) 
-                : Colors.white70,
+            color: isDark ? Colors.white70 : const Color(0xFF555555),
             fontSize: 22,
             fontWeight: FontWeight.bold,
           ),
@@ -41,7 +41,7 @@ class SettingsScreen extends StatelessWidget {
                 children: [
                   const CircleAvatar(
                     radius: 50,
-                    backgroundImage: AssetImage("assets/images/profile1.png"),
+                    backgroundImage: AssetImage("assets/images/proflie1.png"),
                   ),
                   const SizedBox(height: 15),
                   Text(
@@ -49,7 +49,7 @@ class SettingsScreen extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: Theme.of(context).textTheme.headlineMedium?.color,
+                      color: theme.textTheme.headlineMedium?.color,
                     ),
                   ),
                   const SizedBox(height: 5),
@@ -139,16 +139,14 @@ class SettingsScreen extends StatelessWidget {
                   leading: Icon(
                     Icons.dark_mode_outlined, 
                     size: 24,
-                    color: Theme.of(context).brightness == Brightness.light 
-                        ? Colors.black54 
-                        : Colors.white70,
+                    color: isDark ? Colors.white70 : Colors.black54,
                   ),
                   title: Text(
                     "Dark Mode",
                     style: TextStyle(
                       fontSize: 16, 
                       fontWeight: FontWeight.w500,
-                      color: Theme.of(context).textTheme.bodyLarge?.color,
+                      color: theme.textTheme.bodyLarge?.color,
                     ),
                   ),
                   trailing: Switch(
@@ -172,12 +170,103 @@ class SettingsScreen extends StatelessWidget {
               icon: Icons.logout,
               title: "Logout",
               isLogout: true,
-              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => LoginScreen())),
+              onTap: () => _showLogoutDialog(context),
             ),
             const SizedBox(height: 20),
           ],
         ),
       ),
+    );
+  }
+
+  void _showLogoutDialog(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          backgroundColor: isDark ? AppColors.darkCard : Colors.white,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 30),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  "Logout",
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: isDark ? Colors.white : Colors.black,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  "Are you sure you want to logout?",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: isDark ? Colors.white70 : Colors.grey.shade600,
+                  ),
+                ),
+                const SizedBox(height: 32),
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: Text(
+                          "Cancel",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: isDark ? Colors.white60 : Colors.grey,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: SizedBox(
+                        height: 50,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(builder: (_) => const LoginScreen()),
+                              (route) => false,
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFFD32F2F),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            elevation: 0,
+                          ),
+                          child: const Text(
+                            "Logout",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -188,8 +277,10 @@ class SettingsScreen extends StatelessWidget {
     required VoidCallback onTap,
     bool isLogout = false,
   }) {
-    final color = isLogout ? const Color(0xFFD32F2F) : (Theme.of(context).brightness == Brightness.light ? Colors.black54 : Colors.white70);
-    final textColor = isLogout ? const Color(0xFFD32F2F) : Theme.of(context).textTheme.bodyLarge?.color;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final color = isLogout ? const Color(0xFFD32F2F) : (isDark ? Colors.white70 : Colors.black54);
+    final textColor = isLogout ? const Color(0xFFD32F2F) : theme.textTheme.bodyLarge?.color;
 
     return Column(
       children: [
@@ -208,9 +299,10 @@ class SettingsScreen extends StatelessWidget {
               fontWeight: FontWeight.w500,
             ),
           ),
-          trailing: const Icon(
+          trailing: Icon(
             Icons.chevron_right,
             size: 20,
+            color: isDark ? Colors.white38 : Colors.grey,
           ),
           contentPadding: const EdgeInsets.symmetric(horizontal: 25, vertical: 2),
         ),

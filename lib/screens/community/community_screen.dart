@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:event_management_app/core/constants/app_images.dart';
-import 'package:event_management_app/core/constants/app_colors.dart';
 import 'package:event_management_app/screens/create_event/create_event_screen.dart';
 import 'package:event_management_app/screens/vote/vote_screen.dart';
-
 import 'package:event_management_app/screens/community/group_profile_screen.dart';
 
 class CommunityScreen extends StatelessWidget {
@@ -11,8 +9,11 @@ class CommunityScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         backgroundColor: const Color(0xffD32F2F),
         elevation: 0,
@@ -28,13 +29,13 @@ class CommunityScreen extends StatelessWidget {
             );
           },
           child: Row(
-            children: [
-              const CircleAvatar(
+            children: const [
+              CircleAvatar(
                 radius: 22,
-                backgroundImage: AssetImage("assets/images/event1.png"), // Group profile image placeholder
+                backgroundImage: AssetImage("assets/images/event1.png"),
               ),
-              const SizedBox(width: 12),
-              const Text(
+              SizedBox(width: 12),
+              Text(
                 "Business group",
                 style: TextStyle(
                   color: Colors.white,
@@ -55,26 +56,23 @@ class CommunityScreen extends StatelessWidget {
       ),
       body: Stack(
         children: [
-          // Background Pattern
           Positioned.fill(
             child: Opacity(
-              opacity: 0.1,
+              opacity: isDark ? 0.05 : 0.1,
               child: Image.asset(
                 AppImages.backgroundPattern,
                 fit: BoxFit.cover,
               ),
             ),
           ),
-
-          // Content
           Column(
             children: [
               const SizedBox(height: 10),
-              const Center(
+              Center(
                 child: Text(
                   "Today",
                   style: TextStyle(
-                    color: Colors.grey,
+                    color: isDark ? Colors.white60 : Colors.grey,
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
                   ),
@@ -99,7 +97,6 @@ class CommunityScreen extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Vote Button
             _buildFAB(
               context: context,
               icon: Icons.how_to_vote,
@@ -107,12 +104,11 @@ class CommunityScreen extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (_) => const VoteScreen()),
+                  MaterialPageRoute(builder: (_) => VoteScreen()),
                 );
               },
             ),
             const SizedBox(height: 12),
-            // Event Button
             _buildFAB(
               context: context,
               icon: Icons.add,
@@ -177,23 +173,28 @@ class CommunityEventCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDark ? theme.cardColor : Colors.white,
         borderRadius: BorderRadius.circular(25),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.08),
-            blurRadius: 15,
-            offset: const Offset(0, 5),
-          ),
-        ],
+        boxShadow: isDark
+            ? null
+            : [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.08),
+                  blurRadius: 15,
+                  offset: const Offset(0, 5),
+                ),
+              ],
+        border: isDark ? Border.all(color: Colors.white10) : null,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Event Image
           ClipRRect(
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(25),
@@ -206,46 +207,42 @@ class CommunityEventCard extends StatelessWidget {
               fit: BoxFit.cover,
             ),
           ),
-
           Padding(
             padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   "Made in Melanin! Black History Month Social",
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black,
+                    color: theme.textTheme.headlineMedium?.color,
                   ),
                 ),
                 const SizedBox(height: 15),
-
-                // Option A
                 _buildPollOption(
+                  context: context,
                   letter: "A.",
                   text: "Made in Melanin! Black History Month Social",
                   votes: "12k Votes",
                   isSelected: true,
                 ),
                 const SizedBox(height: 12),
-
-                // Option B
                 _buildPollOption(
+                  context: context,
                   letter: "B.",
                   text: "Made in Melanin! Black History Month Social",
                   votes: "12k Votes",
                   isSelected: false,
                 ),
-
                 const SizedBox(height: 15),
-                const Align(
+                Align(
                   alignment: Alignment.bottomRight,
                   child: Text(
                     "12hr ago",
                     style: TextStyle(
-                      color: Colors.grey,
+                      color: isDark ? Colors.white60 : Colors.grey,
                       fontSize: 12,
                     ),
                   ),
@@ -259,19 +256,22 @@ class CommunityEventCard extends StatelessWidget {
   }
 
   Widget _buildPollOption({
+    required BuildContext context,
     required String letter,
     required String text,
     required String votes,
     required bool isSelected,
   }) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           letter,
-          style: const TextStyle(
+          style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 14,
+            color: isDark ? Colors.white : Colors.black,
           ),
         ),
         const SizedBox(width: 8),
@@ -305,9 +305,9 @@ class CommunityEventCard extends StatelessWidget {
             children: [
               Text(
                 text,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 13,
-                  color: Colors.black87,
+                  color: isDark ? Colors.white70 : Colors.black87,
                 ),
               ),
               const SizedBox(height: 2),
@@ -315,7 +315,7 @@ class CommunityEventCard extends StatelessWidget {
                 votes,
                 style: TextStyle(
                   fontSize: 10,
-                  color: Colors.grey.shade500,
+                  color: isDark ? Colors.white60 : Colors.grey.shade500,
                 ),
               ),
             ],

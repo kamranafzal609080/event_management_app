@@ -6,22 +6,23 @@ class GroupProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: SingleChildScrollView(
         child: Column(
           children: [
             Stack(
               clipBehavior: Clip.none,
               children: [
-                // Top Red Header
                 Container(
                   height: 200,
                   width: double.infinity,
                   color: const Color(0xffD32F2F),
                   child: Stack(
                     children: [
-                      // Background Pattern
                       Positioned.fill(
                         child: Opacity(
                           opacity: 0.1,
@@ -31,7 +32,6 @@ class GroupProfileScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      // Custom AppBar
                       SafeArea(
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -61,23 +61,21 @@ class GroupProfileScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                // White Rounded Container Overlap
                 Positioned(
                   top: 170,
                   left: 0,
                   right: 0,
                   child: Container(
                     height: 50,
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
+                    decoration: BoxDecoration(
+                      color: theme.scaffoldBackgroundColor,
+                      borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(35),
                         topRight: Radius.circular(35),
                       ),
                     ),
                   ),
                 ),
-                // Profile Image
                 Positioned(
                   top: 120,
                   left: 0,
@@ -85,8 +83,8 @@ class GroupProfileScreen extends StatelessWidget {
                   child: Center(
                     child: Container(
                       padding: const EdgeInsets.all(4),
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
+                      decoration: BoxDecoration(
+                        color: theme.scaffoldBackgroundColor,
                         shape: BoxShape.circle,
                       ),
                       child: const CircleAvatar(
@@ -98,29 +96,27 @@ class GroupProfileScreen extends StatelessWidget {
                 ),
               ],
             ),
-            
-            // Content Section
             Container(
-              color: Colors.white,
+              color: theme.scaffoldBackgroundColor,
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
                 children: [
                   const SizedBox(height: 10),
-                  const Text(
+                  Text(
                     "Business group",
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black,
+                      color: theme.textTheme.headlineMedium?.color,
                     ),
                   ),
                   const SizedBox(height: 12),
-                  const Text(
+                  Text(
                     "Lorem ipsum dolor sit amet consectetur. Cras elit volutpat morbi mauris tincidunt lacus.",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 14,
-                      color: Colors.grey,
+                      color: isDark ? Colors.white70 : Colors.grey,
                       height: 1.4,
                     ),
                   ),
@@ -128,7 +124,7 @@ class GroupProfileScreen extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
                     decoration: BoxDecoration(
-                      color: const Color(0xffFFECEC),
+                      color: isDark ? Colors.red.withOpacity(0.1) : const Color(0xffFFECEC),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: const Text(
@@ -141,19 +137,18 @@ class GroupProfileScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 35),
-                  const Align(
+                  Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
                       "Group Events",
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black,
+                        color: theme.textTheme.titleLarge?.color,
                       ),
                     ),
                   ),
                   const SizedBox(height: 20),
-                  // Event List
                   const GroupEventCard(),
                   const GroupEventCard(),
                   const SizedBox(height: 30),
@@ -172,12 +167,15 @@ class GroupEventCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDark ? theme.cardColor : Colors.white,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: isDark ? Colors.white10 : Colors.grey.shade200),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -196,10 +194,10 @@ class GroupEventCard extends StatelessWidget {
                   fit: BoxFit.cover,
                 ),
               ),
-              Positioned(
+              const Positioned(
                 top: 15,
                 right: 15,
-                child: const Icon(
+                child: Icon(
                   Icons.favorite_border,
                   color: Colors.white,
                   size: 26,
@@ -212,34 +210,34 @@ class GroupEventCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   "Made in Melanin! Black History Month Social.....",
                   style: TextStyle(
                     fontSize: 17,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black,
+                    color: theme.textTheme.titleLarge?.color,
                   ),
                 ),
                 const SizedBox(height: 15),
                 Row(
-                  children: const [
-                    Icon(Icons.calendar_month, color: Colors.black, size: 18),
-                    SizedBox(width: 10),
+                  children: [
+                    Icon(Icons.calendar_month, color: isDark ? Colors.white70 : Colors.black, size: 18),
+                    const SizedBox(width: 10),
                     Text(
                       "28 October 2025 6:00pm GMT",
-                      style: TextStyle(fontSize: 13, color: Colors.black87),
+                      style: TextStyle(fontSize: 13, color: isDark ? Colors.white70 : Colors.black87),
                     ),
                   ],
                 ),
                 const SizedBox(height: 10),
                 Row(
-                  children: const [
-                    Icon(Icons.location_on, color: Colors.black, size: 18),
-                    SizedBox(width: 10),
+                  children: [
+                    Icon(Icons.location_on, color: isDark ? Colors.white70 : Colors.black, size: 18),
+                    const SizedBox(width: 10),
                     Expanded(
                       child: Text(
                         "1901 Thornridge Cir. Shiloh, Hawaii 81063",
-                        style: TextStyle(fontSize: 13, color: Colors.black87),
+                        style: TextStyle(fontSize: 13, color: isDark ? Colors.white70 : Colors.black87),
                       ),
                     ),
                   ],

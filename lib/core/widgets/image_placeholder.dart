@@ -6,15 +6,18 @@ class ImagePlaceholder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           label,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.bold,
-            color: Colors.black,
+            color: isDark ? Colors.white : Colors.black,
           ),
         ),
         const SizedBox(height: 10),
@@ -22,19 +25,19 @@ class ImagePlaceholder extends StatelessWidget {
           width: 130,
           height: 130,
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: isDark ? theme.cardColor : Colors.white,
             borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: Colors.grey.shade300),
+            border: Border.all(color: isDark ? Colors.white12 : Colors.grey.shade300),
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.upload_outlined, size: 35, color: Colors.grey.shade600),
+              Icon(Icons.upload_outlined, size: 35, color: isDark ? Colors.white60 : Colors.grey.shade600),
               const SizedBox(height: 8),
-              const Text(
-                "Uplaod",
+              Text(
+                "Upload",
                 style: TextStyle(
-                  color: Colors.black,
+                  color: isDark ? Colors.white : Colors.black,
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
                 ),

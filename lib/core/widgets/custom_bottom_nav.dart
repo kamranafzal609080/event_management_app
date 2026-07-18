@@ -12,59 +12,39 @@ class CustomBottomNav extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Container(
       height: 75,
-      decoration: const BoxDecoration(
-        color: Colors.white,
+      decoration: BoxDecoration(
+        color: isDark ? theme.scaffoldBackgroundColor : Colors.white,
         border: Border(
           top: BorderSide(
-            color: Color(0xFFE5E5E5),
+            color: isDark ? Colors.white12 : const Color(0xFFE5E5E5),
           ),
         ),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _item(
-            index: 0,
-            icon: Icons.home,
-            text: "Home",
-          ),
-
-          _item(
-            index: 1,
-            icon: Icons.star,
-            text: "Features",
-          ),
-
-          _item(
-            index: 2,
-            icon: Icons.groups_outlined,
-            text: "Community",
-          ),
-
-          _item(
-            index: 3,
-            icon: Icons.favorite_border,
-            text: "Favourite",
-          ),
-
-          _item(
-            index: 4,
-            icon: Icons.settings_outlined,
-            text: "Settings",
-          ),
+          _item(context, index: 0, icon: Icons.home, text: "Home"),
+          _item(context, index: 1, icon: Icons.star, text: "Features"),
+          _item(context, index: 2, icon: Icons.groups_outlined, text: "Community"),
+          _item(context, index: 3, icon: Icons.favorite_border, text: "Favourite"),
+          _item(context, index: 4, icon: Icons.settings_outlined, text: "Settings"),
         ],
       ),
     );
   }
 
-  Widget _item({
+  Widget _item(BuildContext context, {
     required int index,
     required IconData icon,
     required String text,
   }) {
     final bool selected = currentIndex == index;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return InkWell(
       onTap: () {
@@ -76,18 +56,15 @@ class CustomBottomNav extends StatelessWidget {
           Icon(
             icon,
             size: 24,
-            color: selected ? Colors.red : Colors.grey,
+            color: selected ? Colors.red : (isDark ? Colors.white60 : Colors.grey),
           ),
-
           const SizedBox(height: 4),
-
           Text(
             text,
             style: TextStyle(
               fontSize: 12,
-              color: selected ? Colors.red : Colors.grey,
-              fontWeight:
-              selected ? FontWeight.w600 : FontWeight.w400,
+              color: selected ? Colors.red : (isDark ? Colors.white60 : Colors.grey),
+              fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
             ),
           ),
         ],
