@@ -6,6 +6,7 @@ import 'package:event_management_app/screens/settings/edit_profile_screen.dart';
 import 'package:event_management_app/screens/settings/notifications_screen.dart';
 import 'package:event_management_app/screens/auth/login_screen.dart';
 import 'package:event_management_app/core/constants/app_colors.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -234,12 +235,19 @@ class SettingsScreen extends StatelessWidget {
                       child: SizedBox(
                         height: 50,
                         child: ElevatedButton(
-                          onPressed: () {
+                          onPressed: () async {
+                            await FirebaseAuth.instance.signOut();
+
+                            if (!context.mounted) return;
+
                             Navigator.pop(context);
+
                             Navigator.pushAndRemoveUntil(
                               context,
-                              MaterialPageRoute(builder: (_) => const LoginScreen()),
-                              (route) => false,
+                              MaterialPageRoute(
+                                builder: (_) => const LoginScreen(),
+                              ),
+                                  (route) => false,
                             );
                           },
                           style: ElevatedButton.styleFrom(

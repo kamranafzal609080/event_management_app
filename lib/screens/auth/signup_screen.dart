@@ -2,6 +2,9 @@ import 'package:event_management_app/screens/auth/login_screen.dart';
 import 'package:flutter/material.dart';
 import '../../core/constants/app_images.dart';
 import '../../core/constants/app_colors.dart';
+import 'package:event_management_app/controllers/auth_controller.dart';
+import 'package:event_management_app/user/navigation/user_main_navigation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -11,6 +14,14 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
+
+  final AuthController _authController = AuthController();
+
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+       TextEditingController();
+
   bool obscurePassword = true;
   bool obscureConfirmPassword = true;
 
@@ -45,7 +56,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         const TextSpan(
                           text: "Create ",
                           style: TextStyle(
-                            color: Colors.red,
+                            color: AppColors.primary,
                             fontSize: 34,
                             fontWeight: FontWeight.bold,
                           ),
@@ -53,7 +64,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         TextSpan(
                           text: "Account",
                           style: TextStyle(
-                            color: isDark ? Colors.white : Colors.black,
+                            color: isDark ? AppColors.white : AppColors.black,
                             fontSize: 34,
                             fontWeight: FontWeight.bold,
                           ),
@@ -66,7 +77,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     "Enter given detail to create your account",
                     style: TextStyle(
                       fontSize: 13,
-                      color: Colors.grey,
+                      color: AppColors.grey,
                     ),
                   ),
                   const SizedBox(height: 35),
@@ -75,31 +86,32 @@ class _SignupScreenState extends State<SignupScreen> {
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
-                      color: isDark ? Colors.white : Colors.black,
+                      color: isDark ? AppColors.white : AppColors.black,
                     ),
                   ),
                   const SizedBox(height: 10),
                   TextField(
+                    controller: emailController,
                     keyboardType: TextInputType.emailAddress,
-                    style: TextStyle(color: isDark ? Colors.white : Colors.black),
+                    style: TextStyle(color: isDark ? AppColors.white : AppColors.black),
                     decoration: InputDecoration(
                       hintText: "Enter email",
-                      hintStyle: TextStyle(color: isDark ? Colors.white38 : Colors.grey),
+                      hintStyle: TextStyle(color: isDark ? AppColors.white.withOpacity(0.38) : AppColors.grey),
                       filled: true,
-                      fillColor: isDark ? AppColors.darkCard : Colors.white,
+                      fillColor: isDark ? AppColors.darkCard : AppColors.white,
                       contentPadding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
-                        borderSide: isDark ? const BorderSide(color: Colors.white24) : const BorderSide(color: Colors.grey),
+                        borderSide: isDark ? const BorderSide(color: Colors.white24) : const BorderSide(color: AppColors.grey),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
-                        borderSide: isDark ? const BorderSide(color: Colors.white24) : BorderSide(color: Colors.grey),
+                        borderSide: isDark ? const BorderSide(color: Colors.white24) : const BorderSide(color: AppColors.grey),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
                         borderSide: const BorderSide(
-                          color: Colors.red,
+                          color: AppColors.primary,
                           width: 2,
                         ),
                       ),
@@ -111,16 +123,17 @@ class _SignupScreenState extends State<SignupScreen> {
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
-                      color: isDark ? Colors.white : Colors.black,
+                      color: isDark ? AppColors.white : AppColors.black,
                     ),
                   ),
                   const SizedBox(height: 10),
                   TextField(
+                    controller: passwordController,
                     obscureText: obscurePassword,
-                    style: TextStyle(color: isDark ? Colors.white : Colors.black),
+                    style: TextStyle(color: isDark ? AppColors.white : AppColors.black),
                     decoration: InputDecoration(
                       hintText: "Enter password",
-                      hintStyle: TextStyle(color: isDark ? Colors.white38 : Colors.grey),
+                      hintStyle: TextStyle(color: isDark ? AppColors.white.withOpacity(0.38) : AppColors.grey),
                       suffixIcon: GestureDetector(
                         onTap: () {
                           setState(() {
@@ -129,24 +142,24 @@ class _SignupScreenState extends State<SignupScreen> {
                         },
                         child: Icon(
                           obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-                          color: Colors.grey,
+                          color: AppColors.grey,
                         ),
                       ),
                       filled: true,
-                      fillColor: isDark ? AppColors.darkCard : Colors.white,
+                      fillColor: isDark ? AppColors.darkCard : AppColors.white,
                       contentPadding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
-                        borderSide: isDark ? const BorderSide(color: Colors.white24) : const BorderSide(color: Colors.grey),
+                        borderSide: isDark ? const BorderSide(color: Colors.white24) : const BorderSide(color: AppColors.grey),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
-                        borderSide: isDark ? const BorderSide(color: Colors.white24) : BorderSide(color: Colors.grey),
+                        borderSide: isDark ? const BorderSide(color: Colors.white24) : const BorderSide(color: AppColors.grey),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
                         borderSide: const BorderSide(
-                          color: Colors.red,
+                          color: AppColors.primary,
                           width: 2,
                         ),
                       ),
@@ -158,16 +171,17 @@ class _SignupScreenState extends State<SignupScreen> {
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
-                      color: isDark ? Colors.white : Colors.black,
+                      color: isDark ? AppColors.white : AppColors.black,
                     ),
                   ),
                   const SizedBox(height: 10),
                   TextField(
+                    controller: confirmPasswordController,
                     obscureText: obscureConfirmPassword,
-                    style: TextStyle(color: isDark ? Colors.white : Colors.black),
+                    style: TextStyle(color: isDark ? AppColors.white : AppColors.black),
                     decoration: InputDecoration(
                       hintText: "Enter confirm password",
-                      hintStyle: TextStyle(color: isDark ? Colors.white38 : Colors.grey),
+                      hintStyle: TextStyle(color: isDark ? AppColors.white.withOpacity(0.38) : AppColors.grey),
                       suffixIcon: GestureDetector(
                         onTap: () {
                           setState(() {
@@ -176,24 +190,24 @@ class _SignupScreenState extends State<SignupScreen> {
                         },
                         child: Icon(
                           obscureConfirmPassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-                          color: Colors.grey,
+                          color: AppColors.grey,
                         ),
                       ),
                       filled: true,
-                      fillColor: isDark ? AppColors.darkCard : Colors.white,
+                      fillColor: isDark ? AppColors.darkCard : AppColors.white,
                       contentPadding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
-                        borderSide: isDark ? const BorderSide(color: Colors.white24) : const BorderSide(color: Colors.grey),
+                        borderSide: isDark ? const BorderSide(color: Colors.white24) : const BorderSide(color: AppColors.grey),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
-                        borderSide: isDark ? const BorderSide(color: Colors.white24) : BorderSide(color: Colors.grey),
+                        borderSide: isDark ? const BorderSide(color: Colors.white24) : const BorderSide(color: AppColors.grey),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
                         borderSide: const BorderSide(
-                          color: Colors.red,
+                          color: AppColors.primary,
                           width: 2,
                         ),
                       ),
@@ -204,10 +218,63 @@ class _SignupScreenState extends State<SignupScreen> {
                     width: double.infinity,
                     height: 55,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        if (emailController.text.trim().isEmpty ||
+                            passwordController.text.trim().isEmpty ||
+                            confirmPasswordController.text.trim().isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("Please fill all fields"),
+                            ),
+                          );
+                          return;
+                        }
+
+                        if (passwordController.text != confirmPasswordController.text) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("Passwords do not match"),
+                            ),
+                          );
+                          return;
+                        }
+
+                        try {
+                          await _authController.signUp(
+                            email: emailController.text.trim(),
+                            password: passwordController.text.trim(),
+                          );
+
+                          final prefs = await SharedPreferences.getInstance();
+                          await prefs.setBool("seenOnboarding", true);
+
+                          if (!mounted) return;
+
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("Account Created Successfully"),
+                            ),
+                          );
+
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const UserMainNavigation(),
+                            ),
+                          );
+                        } catch (e) {
+                          if (!mounted) return;
+
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(e.toString()),
+                            ),
+                          );
+                        }
+                      },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red,
-                        foregroundColor: Colors.white,
+                        backgroundColor: AppColors.primary,
+                        foregroundColor: AppColors.white,
                         elevation: 0,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15),
@@ -228,7 +295,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       const Expanded(
                         child: Divider(
                           thickness: 1,
-                          color: Colors.grey,
+                          color: AppColors.grey,
                         ),
                       ),
                       const Padding(
@@ -236,7 +303,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         child: Text(
                           "OR",
                           style: TextStyle(
-                            color: Colors.grey,
+                            color: AppColors.grey,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -244,7 +311,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       const Expanded(
                         child: Divider(
                           thickness: 1,
-                          color: Colors.grey,
+                          color: AppColors.grey,
                         ),
                       ),
                     ],
@@ -265,12 +332,12 @@ class _SignupScreenState extends State<SignupScreen> {
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
-                          color: isDark ? Colors.white : Colors.black,
+                          color: isDark ? AppColors.white : AppColors.black,
                         ),
                       ),
                       style: OutlinedButton.styleFrom(
-                        backgroundColor: isDark ? theme.cardColor : Colors.white,
-                        side: const BorderSide(color: Colors.grey),
+                        backgroundColor: isDark ? AppColors.darkCard : AppColors.white,
+                        side: const BorderSide(color: AppColors.grey),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15),
                         ),
@@ -284,7 +351,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       const Text(
                         "Already have an account? ",
                         style: TextStyle(
-                          color: Colors.grey,
+                          color: AppColors.grey,
                           fontSize: 15,
                         ),
                       ),
@@ -298,7 +365,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         child: const Text(
                           "Login",
                           style: TextStyle(
-                            color: Colors.red,
+                            color: AppColors.primary,
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
                           ),

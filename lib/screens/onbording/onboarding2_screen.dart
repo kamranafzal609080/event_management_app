@@ -1,7 +1,9 @@
+import 'package:event_management_app/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import '../../core/constants/app_images.dart';
 import '../auth/login_screen.dart';
 import 'onboarding3_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class OnboardingScreen2 extends StatelessWidget {
   const OnboardingScreen2({super.key});
@@ -32,16 +34,24 @@ class OnboardingScreen2 extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.only(top: 10, right: 20),
                     child: TextButton(
-                      onPressed: () {
-                        Navigator.push(
+                      onPressed: () async {
+                        final prefs = await SharedPreferences.getInstance();
+
+                        await prefs.setBool("seenOnboarding", true);
+
+                        if (!context.mounted) return;
+
+                        Navigator.pushReplacement(
                           context,
-                          MaterialPageRoute(builder: (context) => const LoginScreen()),
+                          MaterialPageRoute(
+                            builder: (_) => const LoginScreen(),
+                          ),
                         );
                       },
                       child: const Text(
                         "Skip",
                         style: TextStyle(
-                          color: Colors.red,
+                          color: AppColors.primary,
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),
@@ -51,7 +61,7 @@ class OnboardingScreen2 extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
                 Image.asset(
-                  "assets/images/onboarding2.png",
+                  AppImages.onboarding2,
                   width: 320,
                   height: 280,
                   fit: BoxFit.contain,
@@ -65,7 +75,7 @@ class OnboardingScreen2 extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.bold,
-                      color: isDark ? Colors.white : Colors.black,
+                      color: isDark ? AppColors.white : AppColors.black,
                       height: 1.2,
                     ),
                   ),
@@ -78,7 +88,7 @@ class OnboardingScreen2 extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 16,
-                      color: isDark ? Colors.white70 : Colors.grey,
+                      color: isDark ? AppColors.white.withOpacity(0.7) : AppColors.grey,
                       height: 1.5,
                       fontWeight: FontWeight.w400,
                     ),
@@ -92,7 +102,7 @@ class OnboardingScreen2 extends StatelessWidget {
                       width: 8,
                       height: 8,
                       decoration: BoxDecoration(
-                        color: isDark ? Colors.white24 : Colors.grey,
+                        color: isDark ? AppColors.white.withOpacity(0.24) : AppColors.indicatorInactive,
                         shape: BoxShape.circle,
                       ),
                     ),
@@ -101,7 +111,7 @@ class OnboardingScreen2 extends StatelessWidget {
                       width: 22,
                       height: 8,
                       decoration: BoxDecoration(
-                        color: Colors.red,
+                        color: AppColors.primary,
                         borderRadius: BorderRadius.circular(20),
                       ),
                     ),
@@ -110,7 +120,7 @@ class OnboardingScreen2 extends StatelessWidget {
                       width: 8,
                       height: 8,
                       decoration: BoxDecoration(
-                        color: isDark ? Colors.white24 : Colors.grey,
+                        color: isDark ? AppColors.white.withOpacity(0.24) : AppColors.indicatorInactive,
                         shape: BoxShape.circle,
                       ),
                     ),
@@ -130,8 +140,8 @@ class OnboardingScreen2 extends StatelessWidget {
                         );
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red,
-                        foregroundColor: Colors.white,
+                        backgroundColor: AppColors.primary,
+                        foregroundColor: AppColors.white,
                         elevation: 0,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15),

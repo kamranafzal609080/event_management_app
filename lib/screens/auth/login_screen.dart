@@ -1,8 +1,12 @@
 import 'package:event_management_app/screens/auth/signup_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/constants/app_images.dart';
 import '../../core/constants/app_colors.dart';
 import '../navigation/main_navigation.dart';
+import 'package:event_management_app/controllers/auth_controller.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:event_management_app/user/navigation/user_main_navigation.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -12,6 +16,10 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final AuthController _authController = AuthController();
+
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
   bool obscurePassword = true;
 
   @override
@@ -53,7 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         TextSpan(
                           text: "To Your Account",
                           style: TextStyle(
-                            color: isDark ? Colors.white : Colors.black,
+                            color: isDark ? AppColors.white : AppColors.black,
                             fontSize: 32,
                             fontWeight: FontWeight.bold,
                           ),
@@ -76,30 +84,31 @@ class _LoginScreenState extends State<LoginScreen> {
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
-                      color: isDark ? Colors.white : Colors.black,
+                      color: isDark ? AppColors.white : AppColors.black,
                     ),
                   ),
                   const SizedBox(height: 10),
                   TextField(
+                    controller: emailController,
                     keyboardType: TextInputType.emailAddress,
-                    style: TextStyle(color: isDark ? Colors.white : Colors.black),
+                    style: TextStyle(color: isDark ? AppColors.white : AppColors.black),
                     decoration: InputDecoration(
                       hintText: "Enter email",
                       hintStyle: TextStyle(
-                        color: isDark ? Colors.white38 : AppColors.grey,
+                        color: isDark ? AppColors.white.withOpacity(0.38) : AppColors.grey,
                         fontSize: 14,
                       ),
 
                       filled: true,
-                      fillColor: isDark ? AppColors.darkCard : Colors.white,
+                      fillColor: isDark ? AppColors.darkCard : AppColors.white,
                       contentPadding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
-                        borderSide: isDark ? const BorderSide(color: Colors.white24) : const BorderSide(color: Colors.grey),
+                        borderSide: isDark ? const BorderSide(color: Colors.white24) : const BorderSide(color: AppColors.grey),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
-                        borderSide: isDark ? const BorderSide(color: Colors.white24) : const BorderSide(color: Colors.grey),
+                        borderSide: isDark ? const BorderSide(color: Colors.white24) : const BorderSide(color: AppColors.grey),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
@@ -116,17 +125,18 @@ class _LoginScreenState extends State<LoginScreen> {
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
-                      color: isDark ? Colors.white : Colors.black,
+                      color: isDark ? AppColors.white : AppColors.black,
                     ),
                   ),
                   const SizedBox(height: 10),
                   TextField(
+                    controller: passwordController,
                     obscureText: obscurePassword,
-                    style: TextStyle(color: isDark ? Colors.white : Colors.black),
+                    style: TextStyle(color: isDark ? AppColors.white : AppColors.black),
                     decoration: InputDecoration(
                       hintText: "Enter password",
                       hintStyle: TextStyle(
-                        color: isDark ? Colors.white38 : AppColors.grey,
+                        color: isDark ? AppColors.white.withOpacity(0.38) : AppColors.grey,
                         fontSize: 14,
                       ),
 
@@ -143,15 +153,15 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       filled: true,
-                      fillColor: isDark ? AppColors.darkCard : Colors.white,
+                      fillColor: isDark ? AppColors.darkCard : AppColors.white,
                       contentPadding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
-                        borderSide: isDark ? const BorderSide(color: Colors.white24) : const BorderSide(color: Colors.grey),
+                        borderSide: isDark ? const BorderSide(color: Colors.white24) : const BorderSide(color: AppColors.grey),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
-                        borderSide: isDark ? const BorderSide(color: Colors.white24) : const BorderSide(color: Colors.grey),
+                        borderSide: isDark ? const BorderSide(color: Colors.white24) : const BorderSide(color: AppColors.grey),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
@@ -187,17 +197,60 @@ class _LoginScreenState extends State<LoginScreen> {
                     width: double.infinity,
                     height: 56,
                     child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const MainNavigation(),
-                          ),
-                        );
+                      onPressed: () async {
+                        try {
+                          final userCredential = await _authController.login(
+                            email: emailController.text.trim(),
+                            password: passwordController.text.trim(),
+                          );
+
+                          final doc = await FirebaseFirestore.instance
+                              .collection('users')
+                              .doc(userCredential.user!.uid)
+                              .get();
+
+                          final role = doc['role'];
+
+                          final prefs = await SharedPreferences.getInstance();
+                          await prefs.setBool("seenOnboarding", true);
+
+                          if (!mounted) return;
+
+                          if (role == "admin") {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text("Admin Login Successful")),
+                            );
+
+                            // Baad mein AdminDashboard add karenge
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => const MainNavigation(),
+                              ),
+                            );
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text("User Login Successful")),
+                            );
+
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => const UserMainNavigation(),
+                              ),
+                            );
+                          }
+                        } catch (e) {
+                          if (!mounted) return;
+
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text(e.toString())),
+                          );
+                        }
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,
-                        foregroundColor: Colors.white,
+                        foregroundColor: AppColors.white,
                         elevation: 2,
                         shadowColor: AppColors.primary.withOpacity(0.3),
                         shape: RoundedRectangleBorder(
@@ -222,8 +275,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           color: isDark ? Colors.white12 : Colors.grey.shade300,
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16),
                         child: Text(
                           "OR",
                           style: TextStyle(
@@ -248,7 +301,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: OutlinedButton(
                       onPressed: () {},
                       style: OutlinedButton.styleFrom(
-                        backgroundColor: isDark ? AppColors.darkCard : Colors.white,
+                        backgroundColor: isDark ? AppColors.darkCard : AppColors.white,
                         side: BorderSide(
                           color: isDark ? Colors.white24 : Colors.grey.shade300,
                         ),
@@ -270,7 +323,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
-                              color: isDark ? Colors.white : Colors.black87,
+                              color: isDark ? AppColors.white : Colors.black87,
                             ),
                           ),
                         ],
